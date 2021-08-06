@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="网络应用demo"
+        android:onClick="toNetActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sharedFlow"
+        android:textAllCaps="false"
+        android:onClick="toSFActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="动画"
+        android:textAllCaps="false"
+        android:onClick="toAnimationActivity"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ll_myview">
+
+    <com.example.test.MyView
+        android:id="@+id/my_view"
+        android:layout_width="200dp"
+        android:layout_height="2000dp"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@drawable/shape_gradient"/>
+    </LinearLayout>
+
+</LinearLayout>
