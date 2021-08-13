@@ -5,17 +5,23 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.test"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 19
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        ndk {
+            abiFilters project.getProperties().get("APP_ABI")
+        }
     }
 
     buildFeatures{
@@ -25,6 +31,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
         }
     }
     compileOptions {
@@ -61,5 +70,11 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.0.1"
     implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.tencent:mmkv-static:1.2.10'
 
 }

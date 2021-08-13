@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import com.example.animation.AnimationActivity
 import com.example.sharedflow.SFActivity
+import com.example.viewgroup.GroupActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
 
     fun toAnimationActivity(v: View){
         val intent = Intent(this,AnimationActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toGroupActivity(v: View){
+        val intent = Intent(this, GroupActivity::class.java)
         startActivity(intent)
     }
 
