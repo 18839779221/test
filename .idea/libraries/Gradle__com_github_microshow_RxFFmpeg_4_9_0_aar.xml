@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.microshow:RxFFmpeg:4.9.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/01ef39fbaa9364867b30311d5e332033/RxFFmpeg-4.9.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/01ef39fbaa9364867b30311d5e332033/RxFFmpeg-4.9.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/01ef39fbaa9364867b30311d5e332033/RxFFmpeg-4.9.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.microshow/RxFFmpeg/4.9.0/6e3504155a792bbbf1f0ed86eaa3a555d1ae770c/RxFFmpeg-4.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
