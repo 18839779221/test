@@ -83,8 +83,8 @@ class AnimationActivity : AppCompatActivity() {
         val anim = ObjectAnimator.ofPropertyValuesHolder(iv_pic, holder1, holder2, holder3)
         anim.interpolator = LinearInterpolator()
         anim.duration = 2000
-        anim.repeatCount = ValueAnimator.INFINITE
-        anim.repeatMode = ValueAnimator.RESTART
+//        anim.repeatCount = ValueAnimator.INFINITE
+//        anim.repeatMode = ValueAnimator.RESTART
         anim.start()
     }
 

@@ -19,9 +19,6 @@ android {
 
         multiDexEnabled true
 
-        ndk {
-            abiFilters project.getProperties().get("APP_ABI")
-        }
     }
 
     buildFeatures{

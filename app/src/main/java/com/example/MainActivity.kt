@@ -1,4 +1,4 @@
-package com.example.test
+package com.example
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.animation.AnimationActivity
+import com.example.ruler.RulerActivity
 import com.example.sharedflow.SFActivity
+import com.example.test.NetActivity
+import com.example.test.R
 import com.example.viewgroup.GroupActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun toNetActivity(v: View) {
-        val intent = Intent(this,NetActivity::class.java)
+        val intent = Intent(this, NetActivity::class.java)
         startActivity(intent)
    }
 
@@ -51,6 +54,11 @@ class MainActivity : AppCompatActivity() {
 
     fun toGroupActivity(v: View){
         val intent = Intent(this, GroupActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toRulerActivity(v: View){
+        val intent = Intent(this, RulerActivity::class.java)
         startActivity(intent)
     }
 

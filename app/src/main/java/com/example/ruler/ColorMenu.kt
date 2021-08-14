@@ -1,7 +1,7 @@
-package com.example.animation
+package com.example.ruler
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,9 +11,11 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.view.children
 import com.example.utils.dp2Px
+import com.example.utils.hasGravity
 import com.example.utils.transformToColorInt
 import kotlin.math.cos
 import kotlin.math.max
@@ -29,7 +31,7 @@ class ColorMenu @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
     private val colors =
-        arrayOf(0xFFFFFF, 0x000000, 0xFFFFCC, 0xCCFFFF, 0xFFCCCC).map { transformToColorInt(it) }
+        arrayOf(0xFFFFFF, 0x000000, 0x993333, 0x0066CC, 0x006633).map { transformToColorInt(it) }
 
     private val colorViews = arrayOfNulls<ColorView>(colors.size)
     private var minRadius = dp2Px(context, 65)
@@ -39,6 +41,13 @@ class ColorMenu @JvmOverloads constructor(
     private var centerPoint: Point? = null
     private var inCorner = true //centerPoint是否在四个角，90度的半径和180度的半径不一样，radius为180度时的半径
 
+    var onSelectedColor: (color: Int) -> Unit = {}
+
+    private var layoutSize = -1
+
+    private var inToggle = false
+    var isExpand = false
+
     init {
         initColorViews()
     }
@@ -46,7 +55,7 @@ class ColorMenu @JvmOverloads constructor(
     private fun initColorViews() {
         for (i in colorViews.indices) {
             val view =
-                ColorView(context = context, color = colors[i], width = itemWidth)
+                ColorView(context = context, color = colors[i])
             val layoutParams = FrameLayout.LayoutParams(width, width)
             addView(view, layoutParams)
             colorViews[i] = view
@@ -63,23 +72,33 @@ class ColorMenu @JvmOverloads constructor(
             )
         }
     }
+//
+//    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+//        val realRadius: Int = if (inCorner) (radius * 1.75).toInt() else radius
+//        if (centerPoint == null) return
+//        for (child in colorViews) {
+//            if (child == null) continue
+//            val hW = child.measuredWidth / 2
+//            val hH = child.measuredHeight / 2
+//            val radian = Math.toRadians(child.angle.toDouble())
+//            val childCenterX = centerPoint!!.x + realRadius * cos(radian)
+//            val childCenterY = centerPoint!!.y + realRadius * sin(radian)
+//            child.layout(
+//                (childCenterX - hW).toInt(),
+//                (childCenterY - hH).toInt(),
+//                (childCenterX + hW).toInt(),
+//                (childCenterY + hH).toInt()
+//            )
+//        }
+//    }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val realRadius: Int = if (inCorner) (radius * 1.75).toInt() else radius
         if (centerPoint == null) return
+        val left = centerPoint!!.x - itemWidth / 2
+        val top = centerPoint!!.y - itemWidth / 2
         for (child in colorViews) {
             if (child == null) continue
-            val hW = child.measuredWidth / 2
-            val hH = child.measuredHeight / 2
-            val radian = Math.toRadians(child.angle.toDouble())
-            val childCenterX = centerPoint!!.x + realRadius * cos(radian)
-            val childCenterY = centerPoint!!.y + realRadius * sin(radian)
-            child.layout(
-                (childCenterX - hW).toInt(),
-                (childCenterY - hH).toInt(),
-                (childCenterX + hW).toInt(),
-                (childCenterY + hH).toInt()
-            )
+            child.layout(left, top, left + itemWidth, top + itemWidth)
         }
     }
 
@@ -146,20 +165,12 @@ class ColorMenu @JvmOverloads constructor(
         setAngles(fromAngle, toAngle)
     }
 
-    private fun hasGravity(mixedGravity: Int, singleGravity1: Int, singleGravity2: Int): Boolean {
-        return hasGravity(mixedGravity, singleGravity1) && hasGravity(mixedGravity, singleGravity2)
-
-    }
-
-    private fun hasGravity(mixedGravity: Int, singleGravity: Int): Boolean {
-        return mixedGravity and singleGravity == singleGravity
-    }
-
-
     fun getLayoutSize(): Int {
+        if (layoutSize != -1) return layoutSize
         radius = calculateRadius()
         val layoutPadding = 10
-        return radius * 2 + itemWidth + layoutPadding * 2
+        layoutSize = radius * 2 + itemWidth + layoutPadding * 2
+        return layoutSize
     }
 
     private fun calculateRadius(): Int {
@@ -171,11 +182,6 @@ class ColorMenu @JvmOverloads constructor(
         return max(((itemWidth / 2 + betweenItemMargin) / sin(perHalfRadian)).toInt(), minRadius)
     }
 
-    fun show(centerViewWidth: Int, centerViewGravity: Int) {
-        changeLayout(centerViewWidth, centerViewGravity)
-        visibility = VISIBLE
-    }
-
     private fun setAngles(fromAngle: Float, toAngle: Float) {
         val perAngle = (toAngle - fromAngle) / (colorViews.size - 1)
         colorViews.forEachIndexed { i, view ->
@@ -183,8 +189,49 @@ class ColorMenu @JvmOverloads constructor(
         }
     }
 
-    fun hide() {
+    fun show(centerViewWidth: Int, centerViewGravity: Int) {
+        if (inToggle) return
+        changeLayout(centerViewWidth, centerViewGravity)
+        isExpand = true
+        toggle(0f, 1f)
+    }
 
+    fun hide() {
+        if (inToggle) return
+        isExpand = false
+        toggle(1f, 0f)
+    }
+
+    @SuppressLint("Recycle")
+    private fun toggle(from: Float, to: Float) {
+        inToggle = true
+        ValueAnimator.ofFloat(from, to).apply {
+            duration = 100
+            interpolator = AccelerateInterpolator()
+            addUpdateListener {
+                updateViewInToggle(it.animatedValue as Float)
+            }
+            start()
+        }
+        inToggle = false
+    }
+
+    private fun updateViewInToggle(percentage: Float){
+        if (centerPoint == null) return
+        visibility = if (percentage == 0f) GONE else VISIBLE
+        val realMaxRadius: Int = if (inCorner) (radius * 1.75).toInt() else radius
+        val realRadius = realMaxRadius * percentage
+        for (child in colorViews) {
+            if (child == null) continue
+            val radian = Math.toRadians(child.angle.toDouble())
+            child.translationX = (realRadius * cos(radian)).toFloat()
+            child.translationY = (realRadius * sin(radian)).toFloat()
+        }
+    }
+
+
+    private fun afterSelectedColor(color: Int) {
+        onSelectedColor(color)
     }
 
     inner class ColorView @JvmOverloads constructor(
@@ -192,7 +239,6 @@ class ColorMenu @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
         color: Int = Color.BLACK,
-        width: Int = 0
     ) : View(context, attrs, defStyleAttr) {
 
         var angle = 0f
@@ -200,6 +246,12 @@ class ColorMenu @JvmOverloads constructor(
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             setColor(color)
             style = Paint.Style.FILL_AND_STROKE
+        }
+
+        init {
+            setOnClickListener {
+                afterSelectedColor(color)
+            }
         }
 
         //不管父布局如何设置，根据构造方法传入的width进行测量
@@ -217,19 +269,6 @@ class ColorMenu @JvmOverloads constructor(
             if (canvas == null) return
             val center = (width / 2).toFloat()
             canvas.drawCircle(center, center, (width / 2).toFloat(), paint)
-        }
-
-        fun translation(distance: Float, angle: Float) {
-            val radian = Math.toRadians(angle.toDouble()).toFloat()
-            val distanceX = distance * sin(radian)
-            val distanceY = distance * cos(radian)
-            val holderX = PropertyValuesHolder.ofFloat("translationX", 0f, distanceX)
-            val holderY = PropertyValuesHolder.ofFloat("translationY", 0f, distanceY)
-            ObjectAnimator.ofPropertyValuesHolder(this, holderX, holderY).apply {
-                duration = 1000
-                start()
-            }
-
         }
     }
 

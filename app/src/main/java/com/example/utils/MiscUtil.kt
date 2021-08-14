@@ -20,3 +20,12 @@ fun transformToColorInt(color: Int): Int {
 fun dp2Px(context: Context, dp: Int): Int {
     return (context.resources.displayMetrics.density * dp).roundToInt()
 }
+
+fun hasGravity(mixedGravity: Int, singleGravity1: Int, singleGravity2: Int): Boolean {
+    return hasGravity(mixedGravity, singleGravity1) && hasGravity(mixedGravity, singleGravity2)
+
+}
+
+fun hasGravity(mixedGravity: Int, singleGravity: Int): Boolean {
+    return mixedGravity and singleGravity == singleGravity
+}

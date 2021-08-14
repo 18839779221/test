@@ -1,13 +1,12 @@
-package com.example.animation
+package com.example.ruler
 
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Point
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import com.example.utils.hasGravity
 import com.example.utils.transformToColorInt
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.math.abs
@@ -40,10 +39,7 @@ class FloatingBall @JvmOverloads constructor(
     private var downTimeStamp = 0L
     private var isLongClick = false //isLongClick=true时此次事件序列不响应点击事件/长按事件/移动事件
 
-    private var totalWidth = 0
-
-    //是否展开颜色面板，长按展开
-    private var isExpand = false
+    private var needAmendTranslation = false //是否需要修正偏移量，在打开或关闭colorMenu时需修正
 
     var onMainButtonClick: () -> Unit = {}
 
@@ -55,8 +51,9 @@ class FloatingBall @JvmOverloads constructor(
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
         //如果不设置isClickable，ViewGroup将无法相应滑动时间（只能接收到ACTION_DOWN事件）
         isClickable = true
-        initMainButton()
         initColorMenu()
+        initMainButton()
+        setOnColorClick {  }
 //        post {
 //            initLayoutParams()
 //        }
@@ -70,27 +67,43 @@ class FloatingBall @JvmOverloads constructor(
         this.layoutParams = mLayoutParams
     }
 
+    private fun initMainButton() {
+        mainButton = FloatingActionButton(context)
+        val layoutParams = LayoutParams(buttonWidth, buttonWidth)
+        layoutParams.gravity = Gravity.RIGHT or Gravity.BOTTOM
+        addView(mainButton, layoutParams)
+        switchColor()
+        mainButton.setOnClickListener {
+            rotate(mainButton)
+            onMainButtonClick()
+        }
+        mainButton.setOnLongClickListener {
+            toggleColorMenu()
+            return@setOnLongClickListener true
+        }
+    }
+
     private fun initColorMenu() {
-        colorMenu = ColorMenu(context = context, itemWidth = buttonWidth)
+        colorMenu = ColorMenu(context = context, itemWidth = buttonWidth * 3 / 4)
         addView(colorMenu)
         colorMenu.visibility = GONE
     }
 
-    private fun initMainButton() {
-        mainButton = FloatingActionButton(context)
-        val layoutParams = MarginLayoutParams(buttonWidth, buttonWidth)
-        mainButton.layoutParams = layoutParams
-        addView(mainButton)
-        switchColor()
-        mainButton.setOnClickListener {
-            rotate(mainButton)
+    fun setOnColorClick(listener: (color: Int) -> Unit) {
+        colorMenu.onSelectedColor = {
+            toggleColorMenu()
+            listener(it)
         }
-        mainButton.setOnLongClickListener {
+    }
+
+    private fun toggleColorMenu() {
+        if (colorMenu.isExpand) {
+            colorMenu.hide()
+        } else {
             val mainButtonGravity = changeMainButtonLayout()
-            isExpand = true
-            colorMenu.show(mainButton.width ,mainButtonGravity)
-            return@setOnLongClickListener true
+            colorMenu.show(mainButton.width, mainButtonGravity)
         }
+        needAmendTranslation = true
     }
 
     private fun changeMainButtonLayout(): Int {
@@ -124,15 +137,101 @@ class FloatingBall @JvmOverloads constructor(
         return btnLp.gravity
     }
 
+
+    /**
+     * 由于amendTranslation()中主要关心的变量为：
+     * 1.mainButton.gravity 2.colorMenu.getLayoutSize() 3.FloatingBall.measureWidth 4.colorMenu.isExpand
+     * mainButton.gravity在每次colorMenu展开后改变，onMeasure()会在mainButton.gravity更新后执行，没有问题
+     * colorMenu.getLayoutSize()的值不会改变，没有问题
+     * FloatingBall.measureWidth在onMeasure之后可能变化，这会影响amendTranslation()计算的偏移量
+     * colorMenu.isExpand可以控制让其在amendTranslation()期间不改变，没有问题
+     *
+     * 于是就只有FloatingBall.measureWidth会对amendTranslation()产生影响
+     * 我们应该：
+     * 在要打开colorMenu时，在super.onMeasure()前调用amendTranslation()
+     * 在要关闭colorMenu时，在super.onMeasure()后调用amendTranslation()
+     *
+     * 这样FloatingBall.measureWidth != colorMenu.getLayoutSize()才成立，才有可能计算出偏移量
+     */
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val flag = colorMenu.isExpand
+        if (flag && needAmendTranslation){
+            amendTranslation()
+            needAmendTranslation = false
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        if (!flag){
+            amendTranslation()
+            needAmendTranslation = false
+        }
+    }
+
+    /**
+     * 修正FloatingBall的偏移量，由于视觉上我们拖动浮球时移动的是mainButton,但实际修改的是FloatingBall的偏移量(translation)
+     * 在FloatingBall重新调用onLayout时（也就是FloatingBall内部元素UI变化时）,mainButton在FloatingBall内部的位置可能发生变化
+     * FloatingBall的偏移量不变，导致看起来的结果是mainButton的实际位置发生了变化。
+     * 预期的结果是mainButton的位置是不变的，因此需要修正FloatingBall的偏移量让mainButton正常显示
+     */
+    private fun amendTranslation() {
+        val size = colorMenu.getLayoutSize()
+        if (size == 0) return
+        val btnLp = mainButton.layoutParams as LayoutParams
+        val gravity = btnLp.gravity
+        var amendX = 0
+        var amendY = 0
+        var w = measuredWidth
+        when {
+            hasGravity(gravity, Gravity.LEFT, Gravity.TOP) -> {
+                amendX = size - w
+                amendY = size - w
+            }
+            hasGravity(gravity, Gravity.RIGHT, Gravity.TOP) -> {
+                amendY = size - w
+            }
+            hasGravity(gravity, Gravity.LEFT, Gravity.BOTTOM) -> {
+                amendX = size - w
+            }
+            hasGravity(gravity, Gravity.RIGHT, Gravity.BOTTOM) -> {
+            }
+            hasGravity(gravity, Gravity.LEFT, Gravity.CENTER_VERTICAL) -> {
+                amendX = size - w
+                amendY = (size - w) / 2
+            }
+            hasGravity(gravity, Gravity.RIGHT, Gravity.CENTER_VERTICAL) -> {
+                amendY = (size - w) / 2
+            }
+            hasGravity(gravity, Gravity.TOP, Gravity.CENTER_HORIZONTAL) -> {
+                amendX = (size - w) / 2
+                amendY = size - w
+            }
+            hasGravity(gravity, Gravity.BOTTOM, Gravity.CENTER_HORIZONTAL) -> {
+                amendX = (size - w) / 2
+            }
+            hasGravity(gravity, Gravity.CENTER) -> {
+                amendX = (size - w) / 2
+                amendY = (size - w) / 2
+            }
+        }
+        //要保证colorMenu.isExpand变量是状态切换过后的状态
+        if (!colorMenu.isExpand) {
+            amendX = -amendX
+            amendY = -amendY
+        }
+        translationX += amendX
+        translationY += amendY
+    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return true
+        if (!colorMenu.isExpand) {
+            return true
+        }
+        return false
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
         val x = event.rawX
         val y = event.rawY
-        Log.e("testevent", "${event.action}-$x-$y")
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchDown(x, y)
@@ -204,12 +303,8 @@ class FloatingBall @JvmOverloads constructor(
     }
 
     private fun onMove(deltaX: Float, deltaY: Float) {
-        offsetLeftAndRight(deltaX.toInt())
-        offsetTopAndBottom(deltaY.toInt())
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        translationX += deltaX
+        translationY += deltaY
     }
 
     //翻转控件的同时切换颜色
@@ -237,28 +332,12 @@ class FloatingBall @JvmOverloads constructor(
 
     private fun onClick() {
         mainButton.performClick()
-        onMainButtonClick()
     }
 
-
     private fun onLongClick() {
-        if (!isExpand) {
+        if (!colorMenu.isExpand) {
             mainButton.performLongClick()
         }
     }
-
-
-    companion object {
-        const val LEFT_TOP = 1
-        const val LEFT_CENTER = 2
-        const val LEFT_BOTTOM = 3
-        const val RIGHT_TOP = 4
-        const val RIGHT_CENTER = 5
-        const val RIGHT_BOTTOM = 6
-        const val TOP_CENTER = 7
-        const val BOTTOM_CENTER = 8
-        const val CENTER = 9
-    }
-
 
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context="com.example.MainActivity">
 
     <Button
         android:layout_width="match_parent"
@@ -32,6 +32,13 @@
         android:text="自定义ViewGroup"
         android:textAllCaps="false"
         android:onClick="toGroupActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="尺帝"
+        android:textAllCaps="false"
+        android:onClick="toRulerActivity"/>
 
     <TextView
         android:id="@+id/tv_test"

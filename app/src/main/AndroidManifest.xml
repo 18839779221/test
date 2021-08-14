@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.Test">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,6 +27,7 @@
         <activity android:name="com.example.sharedflow.SFActivity" />
         <activity android:name="com.example.animation.AnimationActivity" />
         <activity android:name="com.example.viewgroup.GroupActivity" />
+        <activity android:name="com.example.ruler.RulerActivity" />
     </application>
 
 </manifest>
