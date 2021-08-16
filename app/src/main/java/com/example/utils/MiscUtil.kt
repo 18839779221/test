@@ -2,6 +2,8 @@ package com.example.utils
 
 import android.content.Context
 import android.graphics.Color
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -28,4 +30,8 @@ fun hasGravity(mixedGravity: Int, singleGravity1: Int, singleGravity2: Int): Boo
 
 fun hasGravity(mixedGravity: Int, singleGravity: Int): Boolean {
     return mixedGravity and singleGravity == singleGravity
+}
+
+fun limitRange(value: Float, max: Float, min: Float): Float {
+    return max(min(value, max), min)
 }

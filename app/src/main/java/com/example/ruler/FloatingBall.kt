@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.*
 import android.widget.FrameLayout
 import com.example.utils.hasGravity
+import com.example.utils.limitRange
 import com.example.utils.transformToColorInt
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.math.abs
@@ -17,7 +18,7 @@ import kotlin.math.abs
  * @description RulerView的控制组件
  */
 class FloatingBall @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private lateinit var mainButton: FloatingActionButton
@@ -53,18 +54,6 @@ class FloatingBall @JvmOverloads constructor(
         isClickable = true
         initColorMenu()
         initMainButton()
-        setOnColorClick {  }
-//        post {
-//            initLayoutParams()
-//        }
-    }
-
-    private fun initLayoutParams() {
-        mLayoutParams = layoutParams as LayoutParams
-        mLayoutParams.width = LayoutParams.WRAP_CONTENT
-        mLayoutParams.height = LayoutParams.WRAP_CONTENT
-        mLayoutParams.gravity = Gravity.BOTTOM
-        this.layoutParams = mLayoutParams
     }
 
     private fun initMainButton() {
@@ -109,13 +98,15 @@ class FloatingBall @JvmOverloads constructor(
     private fun changeMainButtonLayout(): Int {
         val btnLp = LayoutParams(mainButton.layoutParams)
         val parent = parent as ViewGroup
-        val colorMenuSize = colorMenu.getLayoutSize()
+        val halfSize = colorMenu.getLayoutSize() / 2
         btnLp.gravity = Gravity.NO_GRAVITY
+        val centerX = x + mainButton.width / 2
+        val centerY = y + mainButton.width / 2
         when {
-            y - colorMenuSize < 0 -> {
+            centerY - halfSize < 0 -> {
                 btnLp.gravity = btnLp.gravity or Gravity.TOP
             }
-            parent.height - y < colorMenuSize -> {
+            parent.height - centerY < halfSize -> {
                 btnLp.gravity = btnLp.gravity or Gravity.BOTTOM
             }
             else -> {
@@ -123,10 +114,10 @@ class FloatingBall @JvmOverloads constructor(
             }
         }
         when {
-            x - colorMenuSize < 0 -> {
+            centerX - halfSize < 0 -> {
                 btnLp.gravity = btnLp.gravity or Gravity.LEFT
             }
-            parent.width - x < colorMenuSize -> {
+            parent.width - centerX < halfSize -> {
                 btnLp.gravity = btnLp.gravity or Gravity.RIGHT
             }
             else -> {
@@ -155,12 +146,12 @@ class FloatingBall @JvmOverloads constructor(
      */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val flag = colorMenu.isExpand
-        if (flag && needAmendTranslation){
+        if (flag && needAmendTranslation) {
             amendTranslation()
             needAmendTranslation = false
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (!flag){
+        if (!flag) {
             amendTranslation()
             needAmendTranslation = false
         }
@@ -260,6 +251,10 @@ class FloatingBall @JvmOverloads constructor(
 
     private fun touchMove(x: Float, y: Float) {
         if (isLongClick) return
+        if (colorMenu.isExpand){
+            toggleColorMenu()
+            return
+        }
         val totalDeltaX = x - downX
         val totalDeltaY = y - downY
         val deltaX = x - lastX
@@ -293,13 +288,17 @@ class FloatingBall @JvmOverloads constructor(
     //浮球移到靠近的一边
     private fun moveToEdge() {
         val parent = parent as ViewGroup
-        val centerX = parent.width / 2
-        val destX = if (x > centerX) {
-            parent.width - width
+        val centerParentX = parent.width / 2
+        val centerX = x + width / 2
+        val margin = 30
+        val destX = if (centerX > centerParentX) {
+            parent.width - width - margin
         } else {
-            0
+            0 + margin
         }
-        onMove(destX - x, 0f)
+        //防止滑出屏幕
+        val destY = limitRange(y, (parent.height - width).toFloat(), 0f) - y
+        onMove(destX - x, destY)
     }
 
     private fun onMove(deltaX: Float, deltaY: Float) {
@@ -331,6 +330,10 @@ class FloatingBall @JvmOverloads constructor(
     }
 
     private fun onClick() {
+        if (colorMenu.isExpand){
+            toggleColorMenu()
+            return
+        }
         mainButton.performClick()
     }
 

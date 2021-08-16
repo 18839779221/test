@@ -72,25 +72,6 @@ class ColorMenu @JvmOverloads constructor(
             )
         }
     }
-//
-//    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-//        val realRadius: Int = if (inCorner) (radius * 1.75).toInt() else radius
-//        if (centerPoint == null) return
-//        for (child in colorViews) {
-//            if (child == null) continue
-//            val hW = child.measuredWidth / 2
-//            val hH = child.measuredHeight / 2
-//            val radian = Math.toRadians(child.angle.toDouble())
-//            val childCenterX = centerPoint!!.x + realRadius * cos(radian)
-//            val childCenterY = centerPoint!!.y + realRadius * sin(radian)
-//            child.layout(
-//                (childCenterX - hW).toInt(),
-//                (childCenterY - hH).toInt(),
-//                (childCenterX + hW).toInt(),
-//                (childCenterY + hH).toInt()
-//            )
-//        }
-//    }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         if (centerPoint == null) return
