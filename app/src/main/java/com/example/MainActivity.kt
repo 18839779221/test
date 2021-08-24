@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.animation.AnimationActivity
+import com.example.nestedscroll.NestedScrollActivity
 import com.example.ruler.RulerActivity
+import com.example.scroll.ScrollActivity
 import com.example.sharedflow.SFActivity
 import com.example.test.NetActivity
 import com.example.test.R
@@ -17,24 +19,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        my_view.onClick = {
-            //ll_myview.scrollTo(0,ll_myview.scrollY+100)
-            Toast.makeText(this, "onClick", Toast.LENGTH_SHORT).show()
-
-        }
-
-        my_view.onScroll = { deltaX: Int, deltaY: Int ->
-            var x = deltaX
-            var y = deltaY
-            if (deltaY < 0) {
-                if (ll_myview.scrollY + deltaY < 0) y = -ll_myview.scrollY
-            } else {
-                if (ll_myview.scrollY + deltaY + 500 >= my_view.height) y =
-                    my_view.height - ll_myview.scrollY - 500
-            }
-            Toast.makeText(this, "x=$x,y=$y", Toast.LENGTH_SHORT).show()
-            ll_myview.scrollBy(x, y)
-        }
     }
 
     fun toNetActivity(v: View) {
@@ -59,6 +43,16 @@ class MainActivity : AppCompatActivity() {
 
     fun toRulerActivity(v: View){
         val intent = Intent(this, RulerActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toScrollActivity(v: View){
+        val intent = Intent(this, ScrollActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toNestedScrollActivity(v: View){
+        val intent = Intent(this, NestedScrollActivity::class.java)
         startActivity(intent)
     }
 

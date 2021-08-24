@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.nestedscroll.ScrollParentLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="I'm TOP!"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:background="@color/teal_700"/>
+
+    <com.example.nestedscroll.ScrollChildLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 2"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 3"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 4"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 5"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 6"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 7"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 8"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 9"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 10"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 11"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 12"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 13"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 14"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 15"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="I'm 16"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:background="@color/red2"/>
+
+
+
+    </com.example.nestedscroll.ScrollChildLayout>
+
+
+
+
+
+
+</com.example.nestedscroll.ScrollParentLayout>

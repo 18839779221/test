@@ -28,6 +28,8 @@
         <activity android:name="com.example.animation.AnimationActivity" />
         <activity android:name="com.example.viewgroup.GroupActivity" />
         <activity android:name="com.example.ruler.RulerActivity" />
+        <activity android:name="com.example.scroll.ScrollActivity" />
+        <activity android:name="com.example.nestedscroll.NestedScrollActivity" />
     </application>
 
 </manifest>

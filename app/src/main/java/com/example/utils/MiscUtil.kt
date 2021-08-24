@@ -35,3 +35,7 @@ fun hasGravity(mixedGravity: Int, singleGravity: Int): Boolean {
 fun limitRange(value: Float, max: Float, min: Float): Float {
     return max(min(value, max), min)
 }
+
+fun limitRange(value: Int, max: Int, min: Int): Int {
+    return max(min(value, max), min)
+}
