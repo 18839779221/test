@@ -1,149 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.nestedscroll.ScrollParentLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:text="I'm TOP!"
+        android:background="@color/teal_700"
         android:gravity="center"
+        android:text="I'm TOP!"
         android:textSize="24sp"
-        android:background="@color/teal_700"/>
-
-<!--    <TextView-->
-<!--        android:id="@+id/title_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:text="I'm TitleBar!"-->
-<!--        android:gravity="center"-->
-<!--        android:textSize="24sp"-->
-<!--        android:background="@color/teal_300"/>-->
-
-    <com.example.nestedscroll.ScrollChildLayout
-        android:id="@+id/scroll_child_layout"
+        app:layout_behavior="com.example.coordinatorlayout.TopBehavior"/>
+    <LinearLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="300dp"
+        android:orientation="vertical"
+        app:layout_behavior="com.example.coordinatorlayout.ContentBehavior">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 1"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 2"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 3"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 4"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 5"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 6"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 7"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 8"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 9"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 10"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 11"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 12"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 13"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red2"
+            android:gravity="center"
             android:text="I'm 14"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/red1"
+            android:gravity="center"
             android:text="I'm 15"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red1"/>
+            android:textSize="24sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="I'm 16"
+            android:background="@color/red2"
             android:gravity="center"
-            android:textSize="24sp"
-            android:background="@color/red2"/>
+            android:text="I'm 16"
+            android:textSize="24sp" />
 
 
-    </com.example.nestedscroll.ScrollChildLayout>
+    </LinearLayout>
 
 
-
-</com.example.nestedscroll.ScrollParentLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

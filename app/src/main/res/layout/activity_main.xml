@@ -54,6 +54,20 @@
         android:textAllCaps="false"
         android:onClick="toNestedScrollActivity"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fragment"
+        android:textAllCaps="false"
+        android:onClick="toFragmentActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="阴影"
+        android:textAllCaps="false"
+        android:onClick="toShadowActivity"/>
+
     <TextView
         android:id="@+id/tv_test"
         android:layout_width="wrap_content"

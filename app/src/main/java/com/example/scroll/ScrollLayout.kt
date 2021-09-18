@@ -2,6 +2,7 @@ package com.example.scroll
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
@@ -40,6 +41,8 @@ open class ScrollLayout @JvmOverloads constructor(
     private var lastX = 0f
     private var lastY = 0f
 
+    private var isBeingDragged = false
+
     init {
         isVerticalScrollBarEnabled = true
         scrollBarStyle = View.SCROLLBARS_INSIDE_INSET
@@ -54,6 +57,7 @@ open class ScrollLayout @JvmOverloads constructor(
             }
             totalHeight = totalLength
         }
+        setMeasuredDimension(measuredWidth, totalHeight)
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
@@ -85,8 +89,12 @@ open class ScrollLayout @JvmOverloads constructor(
     private fun touchDown(currX: Float, currY: Float) {
         downX = currX
         downY = currY
+        isBeingDragged = false
         if (!scroller.isFinished) {
             scroller.abortAnimation()
+        }
+        if (!overScroller.isFinished){
+            overScroller.abortAnimation()
         }
     }
 
@@ -97,7 +105,10 @@ open class ScrollLayout @JvmOverloads constructor(
     private fun handleScroll(currX: Float, currY: Float) {
         val deltaX = currX - lastX
         val deltaY = currY - lastY
-//        if (abs(deltaX) < touchSlop && abs(deltaY) < touchSlop) return
+        if (!isBeingDragged && abs(deltaX) < touchSlop && abs(deltaY) < touchSlop) {
+            isBeingDragged = true
+        }
+        if (!isBeingDragged) return
         if (canScrollVertically(1) || canScrollVertically(-1)) {
             //防止滑出边界
             val realDeltaY = limitRange(-deltaY.toInt(), totalHeight - height - scrollY, -scrollY)
@@ -106,11 +117,8 @@ open class ScrollLayout @JvmOverloads constructor(
         awakenScrollBars()
     }
 
-    override fun computeVerticalScrollRange(): Int {
-        return totalHeight
-    }
-
     private fun touchUp() {
+        isBeingDragged = false
         velocityTracker.computeCurrentVelocity(1000, vc.scaledMaximumFlingVelocity.toFloat())
         val yVelocity = velocityTracker.yVelocity
         if (abs(yVelocity) >= vc.scaledMinimumFlingVelocity) {
@@ -130,7 +138,7 @@ open class ScrollLayout @JvmOverloads constructor(
         invalidate()
     }
 
-    private fun flingWithScroll(yVelocity: Float) {
+    private fun flingWithScroller(yVelocity: Float) {
         scroller.fling(scrollX, scrollY, 0, -yVelocity.toInt(), 0, scrollX, 0, getScrollRange())
         invalidate()
     }
@@ -140,14 +148,14 @@ open class ScrollLayout @JvmOverloads constructor(
         awakenScrollBars()
     }
 
-    private fun computeWithScroller(){
+    private fun computeWithScroller() {
         if (scroller.computeScrollOffset()) {
             scrollTo(scroller.currX, scroller.currY)
             postInvalidate()
         }
     }
 
-    private fun computeWithOverScroller(){
+    private fun computeWithOverScroller() {
         if (overScroller.computeScrollOffset()) {
             scrollTo(overScroller.currX, overScroller.currY)
             postInvalidate()

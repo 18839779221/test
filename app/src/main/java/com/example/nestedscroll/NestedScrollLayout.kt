@@ -2,10 +2,8 @@ package com.example.nestedscroll
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.VelocityTracker
-import android.view.View
-import android.view.ViewConfiguration
+import android.util.Log
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.OverScroller
 import android.widget.Scroller
@@ -27,19 +25,25 @@ open class NestedScrollLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var totalHeight: Int = 0
+    private var totalHeight = 0
+    private var visibleHeight = 0
     private val vc = ViewConfiguration.get(context)
-    private val touchSlop: Int = vc.scaledTouchSlop
+    protected val touchSlop = vc.scaledTouchSlop
+    protected val maxFlingVelocity = vc.scaledMaximumFlingVelocity
+    protected val minFlingVelocity = vc.scaledMinimumFlingVelocity
 
-    private val velocityTracker = VelocityTracker.obtain()
+    protected val velocityTracker = VelocityTracker.obtain()
 
-    private val scroller = Scroller(context)
-    private val overScroller = OverScroller(context)
+    protected val overScroller = OverScroller(context)
 
     private var downX = 0f
     private var downY = 0f
-    private var lastX = 0f
-    private var lastY = 0f
+    protected var lastX = 0f
+    protected var lastY = 0f
+
+    protected var lastFlingY = 0
+
+    protected var isBeingDragged = false
 
 
     init {
@@ -49,6 +53,7 @@ open class NestedScrollLayout @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        visibleHeight = measuredHeight
         if (orientation == VERTICAL) {
             var totalLength = paddingTop + paddingBottom
             for (child in children) {
@@ -56,30 +61,10 @@ open class NestedScrollLayout @JvmOverloads constructor(
             }
             totalHeight = totalLength
         }
+        Log.e("totalLength", "${javaClass.name} - $totalHeight - $visibleHeight")
+        setMeasuredDimension(measuredWidth, totalHeight)
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        //要使用嵌套滑动的机制，首先需要让子View来首先处理滑动
-        var intercept = false
-        if (ev == null) return intercept
-        val currX = ev.x
-        var currY = ev.y
-        when (ev.action) {
-            MotionEvent.ACTION_MOVE -> {
-                if (abs(currY - lastY) >= touchSlop) {
-                    intercept = true
-                    startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
-                }
-            }
-            MotionEvent.ACTION_CANCEL,
-            MotionEvent.ACTION_UP -> {
-                stopNestedScroll()
-            }
-        }
-        lastX = currX
-        lastY = currY
-        return intercept
-    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
@@ -103,76 +88,67 @@ open class NestedScrollLayout @JvmOverloads constructor(
         return true
     }
 
-    private fun touchDown(currX: Float, currY: Float) {
+    open fun touchDown(currX: Float, currY: Float) {
         downX = currX
         downY = currY
-        if (!scroller.isFinished) {
-            scroller.abortAnimation()
+        if (!overScroller.isFinished) {
+            overScroller.abortAnimation()
         }
     }
 
-    private fun touchMove(currX: Float, currY: Float) {
+    open fun touchMove(currX: Float, currY: Float) {
         handleScroll(currX, currY)
     }
 
-    private fun handleScroll(currX: Float, currY: Float) {
+    open fun handleScroll(currX: Float, currY: Float) {
         val deltaX = currX - lastX
         val deltaY = currY - lastY
 //        if (abs(deltaX) < touchSlop && abs(deltaY) < touchSlop) return
-        if (canScrollVertically(1) || canScrollVertically(-1)) {
+        if (canScrollVertically(-deltaY.toInt())) {
             //防止滑出边界
-            val realDeltaY = limitRange(-deltaY.toInt(), totalHeight - height - scrollY, -scrollY)
-            scrollBy(0, realDeltaY)
+            val realDeltaY = getRealScrollDistance(deltaY.toInt())
+            scrollBy(0, -realDeltaY)
         }
         awakenScrollBars()
     }
 
-    override fun computeVerticalScrollRange(): Int {
-        return totalHeight
+    override fun computeVerticalScrollExtent(): Int {
+        return visibleHeight
     }
 
-    private fun touchUp() {
-        velocityTracker.computeCurrentVelocity(1000, vc.scaledMaximumFlingVelocity.toFloat())
+    open fun touchUp() {
+        velocityTracker.computeCurrentVelocity(1000, maxFlingVelocity.toFloat())
         val yVelocity = velocityTracker.yVelocity
-        if (abs(yVelocity) >= vc.scaledMinimumFlingVelocity) {
+        if (abs(yVelocity) >= minFlingVelocity) {
             flingWithOverScroller(yVelocity)
         }
     }
 
-    private fun flingWithOverScroller(yVelocity: Float) {
-        overScroller.fling(scrollX,
+    protected fun flingWithOverScroller(yVelocity: Float) {
+        overScroller.abortAnimation()
+        overScroller.fling(0,
             scrollY,
             0,
             -yVelocity.toInt(),
             0,
-            scrollX,
             0,
-            getScrollRange())
-        invalidate()
-    }
-
-    private fun flingWithScroll(yVelocity: Float) {
-        scroller.fling(scrollX, scrollY, 0, -yVelocity.toInt(), 0, scrollX, 0, getScrollRange())
+            Int.MIN_VALUE,
+            Int.MAX_VALUE)
+        lastFlingY = scrollY
         invalidate()
     }
 
     override fun computeScroll() {
-        computeWithOverScroller()
-        awakenScrollBars()
-    }
-
-    private fun computeWithScroller() {
-        if (scroller.computeScrollOffset()) {
-            scrollTo(scroller.currX, scroller.currY)
-            postInvalidate()
-        }
-    }
-
-    private fun computeWithOverScroller() {
         if (overScroller.computeScrollOffset()) {
-            scrollTo(overScroller.currX, overScroller.currY)
-            postInvalidate()
+            val deltaY = overScroller.currY - lastFlingY
+            lastFlingY = overScroller.currY
+            if(canScrollVertically(-deltaY)){
+                val realScrollY = getRealScrollDistance(deltaY)
+                scrollBy(0, -realScrollY)
+                postInvalidate()
+            }
         }
+        awakenScrollBars()
     }
 
     override fun onDetachedFromWindow() {
@@ -180,7 +156,17 @@ open class NestedScrollLayout @JvmOverloads constructor(
         super.onDetachedFromWindow()
     }
 
-    private fun getScrollRange(): Int {
-        return totalHeight - height
+    fun setVisibleHeight(height: Int) {
+        visibleHeight = height
+    }
+
+    fun getScrollRange(): Int {
+        return totalHeight - visibleHeight
+    }
+
+    open fun getRealScrollDistance(deltaY: Int): Int {
+        return limitRange(deltaY,
+            scrollY,
+            -getScrollRange() + scrollY)
     }
 }

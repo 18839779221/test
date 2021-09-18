@@ -17,5 +17,13 @@
         android:layout_marginBottom="50dp"
         android:layout_marginRight="30dp"/>
 
+    <View
+        android:id="@+id/tipsView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@color/red1"
+        android:layout_gravity="right"
+        android:focusable="true"/>
+
 
 </FrameLayout>

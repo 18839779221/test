@@ -3,12 +3,18 @@ package com.example
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.DynamicDrawableSpan
+import android.text.style.ImageSpan
 import android.view.View
 import android.widget.Toast
 import com.example.animation.AnimationActivity
+import com.example.fragment.FragmentActivity
 import com.example.nestedscroll.NestedScrollActivity
 import com.example.ruler.RulerActivity
 import com.example.scroll.ScrollActivity
+import com.example.shadow.ShadowActivity
 import com.example.sharedflow.SFActivity
 import com.example.test.NetActivity
 import com.example.test.R
@@ -53,6 +59,16 @@ class MainActivity : AppCompatActivity() {
 
     fun toNestedScrollActivity(v: View){
         val intent = Intent(this, NestedScrollActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toFragmentActivity(v: View){
+        val intent = Intent(this, FragmentActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toShadowActivity(v: View){
+        val intent = Intent(this, ShadowActivity::class.java)
         startActivity(intent)
     }
 
