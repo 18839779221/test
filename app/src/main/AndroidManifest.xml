@@ -33,6 +33,8 @@
         <activity android:name="com.example.nestedscroll.NestedScrollActivity" />
         <activity android:name="com.example.fragment.FragmentActivity" />
         <activity android:name="com.example.shadow.ShadowActivity" />
+        <activity android:name="com.example.coordinatorlayout.multinested.MultiNestedActivity" />
+        <activity android:name="com.example.recyclerview.RecyclerViewActivity" />
     </application>
 
 </manifest>

@@ -10,8 +10,10 @@ import android.text.style.ImageSpan
 import android.view.View
 import android.widget.Toast
 import com.example.animation.AnimationActivity
+import com.example.coordinatorlayout.multinested.MultiNestedActivity
 import com.example.fragment.FragmentActivity
 import com.example.nestedscroll.NestedScrollActivity
+import com.example.recyclerview.RecyclerViewActivity
 import com.example.ruler.RulerActivity
 import com.example.scroll.ScrollActivity
 import com.example.shadow.ShadowActivity
@@ -69,6 +71,16 @@ class MainActivity : AppCompatActivity() {
 
     fun toShadowActivity(v: View){
         val intent = Intent(this, ShadowActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toMultiNestedActivity(v: View){
+        val intent = Intent(this, MultiNestedActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toRecyclerViewActivity(v: View){
+        val intent = Intent(this, RecyclerViewActivity::class.java)
         startActivity(intent)
     }
 

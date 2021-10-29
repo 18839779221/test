@@ -21,11 +21,10 @@ class TopBehavior: CoordinatorLayout.Behavior<View>() {
         type: Int
     ) {
         val height = child.height
-        val oldTranslationY = child.translationY
-        val newTranslationY = limitRange(dy + oldTranslationY, height.toFloat(), 0f)
-        if (newTranslationY != oldTranslationY){
-            child.translationY = newTranslationY
-            consumed[1] = (newTranslationY - oldTranslationY).toInt()
-        }
+
+    }
+
+    fun getScrollRange(): Int {
+        return 0
     }
 }

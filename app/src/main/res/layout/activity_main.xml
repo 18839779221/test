@@ -68,6 +68,20 @@
         android:textAllCaps="false"
         android:onClick="toShadowActivity"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="多层嵌套滑动"
+        android:textAllCaps="false"
+        android:onClick="toMultiNestedActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RecyclerView"
+        android:textAllCaps="false"
+        android:onClick="toRecyclerViewActivity"/>
+
     <TextView
         android:id="@+id/tv_test"
         android:layout_width="wrap_content"
