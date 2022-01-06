@@ -1,8 +1,7 @@
 package com.example.animation
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.animation.ValueAnimator
+import android.animation.*
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -18,9 +17,17 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
+import androidx.core.view.drawToBitmap
 import com.example.test.R
 import com.example.utils.dp2Px
 import kotlinx.android.synthetic.main.activity_animation.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
+import kotlin.math.tan
+import kotlin.random.Random
 
 /**
  * @author wanglun
@@ -29,6 +36,17 @@ import kotlinx.android.synthetic.main.activity_animation.*
  */
 class AnimationActivity : AppCompatActivity() {
     private var popWindow: PopupWindow? = null
+    val picW = 300
+    val picH = 500
+    val bgW = picW * 4
+    val bgH = (picH * 2).toInt()
+    val bgPixels = IntArray(bgW * bgH)
+    val bgAnglePixels = IntArray(bgW * bgH)
+    var currLeft = picW-1
+    val dx = 10
+    var dy = 0
+    lateinit var bgBitmap: Bitmap
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +56,39 @@ class AnimationActivity : AppCompatActivity() {
 
     private fun initView() {
         initImageView()
-        playScaleAnimationWithObjectAnimation()
         tipsView.post {
             showTipPopWindow()
         }
     }
 
     private fun initImageView() {
-        loadImageInDensity()
+//        iv_pic.setImageBitmap(loadBitmapInDensity(R.mipmap.high_quality_pic))
+//        iv_pic2.setImageBitmap(loadBitmapInDensity(R.drawable.frozen))
+//
+//        playScaleAnimationWithObjectAnimation(iv_pic)
+//        playScaleAnimationWithObjectAnimation(iv_pic2)
+
+        initBitmapAnim()
+    }
+
+    private fun initBitmapAnim() {
+
+        val bitmap =
+            Bitmap.createBitmap(loadBitmapInDensity(R.mipmap.high_quality_pic), 0, 0, picW, picH)
+
+        val picPixels = IntArray(picW * picH)
+        bitmap.getPixels(picPixels, 0, picW, 0, 0, picW, picH)
+        bgBitmap = createBitmap(bgW, bgH)
+
+        bgBitmap.setPixels(picPixels, 0, picW, 0, (bgH * 0.5).toInt(), picW, picH)
+
+        bgBitmap.getPixels(bgPixels, 0, bgW, 0, 0, bgW, bgH)
+
+        iv_pic.setImageBitmap(bgBitmap)
+        iv_pic2.setImageBitmap(bitmap)
+
+        animThread.submit(task)
+
     }
 
     private fun showTipPopWindow() {
@@ -66,12 +109,6 @@ class AnimationActivity : AppCompatActivity() {
                 isOutsideTouchable = true
             }
         }
-
-        popWindow?.let {
-            if (!isFinishing && !it.isShowing) {
-                it.showAsDropDown(tipsView, dp2Px(this, -110),10)
-            }
-        }
     }
 
     private fun loadImageInSampleSize() {
@@ -84,10 +121,10 @@ class AnimationActivity : AppCompatActivity() {
 
     }
 
-    private fun loadImageInDensity() {
+    private fun loadBitmapInDensity(imgResId: Int): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        BitmapFactory.decodeResource(resources, R.mipmap.high_quality_pic, options)
+        BitmapFactory.decodeResource(resources, imgResId, options)
         val srcWidth = options.outWidth
         val srcHeight = options.outHeight
 
@@ -96,9 +133,7 @@ class AnimationActivity : AppCompatActivity() {
         newOptions.inDensity = srcWidth
         newOptions.inTargetDensity = srcWidth / 8
 
-        val bitmap =
-            BitmapFactory.decodeResource(resources, R.mipmap.high_quality_pic, newOptions)
-        iv_pic.setImageBitmap(bitmap)
+        return BitmapFactory.decodeResource(resources, imgResId, newOptions)
     }
 
     private fun playAlphaAnimationWithValueAnimation() {
@@ -114,15 +149,66 @@ class AnimationActivity : AppCompatActivity() {
         anim.start()
     }
 
-    private fun playScaleAnimationWithObjectAnimation() {
+    private val animThread = Executors.newSingleThreadExecutor()
+
+    private val task = Runnable {
+        var returnFlag = true
+        while (returnFlag) {
+            returnFlag = false
+            Log.e("bitmappixel","1")
+            for (i in 0 until bgH) {
+                for (j in (currLeft until bgW).reversed()) {
+                    if (bgPixels[i * bgW + j] == 0) continue
+                    if (j + dx >= bgW) {
+                        bgPixels[i * bgW + j] = 0
+                        continue
+                    }
+                    val random = if (i < bgH / 2) {
+                        (-10..10).random()
+                    } else {
+                        (-10..10).random()
+                    }
+                    val angle = bgAnglePixels[i * bgW + j] + random * 6
+                    val radian = Math.toRadians(angle.toDouble())
+                    dy = -(dx * tan(radian)).toInt()
+                    if (i + dy < 0 || i + dy >= bgH) continue
+                    val targetIndex = (j + dx) + (i + dy) * bgW
+                    bgPixels[targetIndex] = bgPixels[i * bgW + j]
+                    bgAnglePixels[targetIndex] = bgAnglePixels[i * bgW + j]
+                    bgPixels[i * bgW + j] = 0
+                    bgAnglePixels[i * bgW + j] = 0
+                    returnFlag = true
+                    Log.e("bitmappixel","2")
+                }
+            }
+            Log.e("bitmappixel","3")
+            currLeft = (currLeft - 4).coerceAtLeast(0)
+            bgBitmap.setPixels(bgPixels, 0, bgW, 0, 0, bgW, bgH)
+            runOnUiThread {
+                iv_pic.setImageBitmap(bgBitmap)
+            }
+            Thread.sleep(40)
+        }
+
+    }
+
+    private fun playScaleAnimationWithObjectAnimation(v: View) {
+        //动画硬件加速
+        //https://github.com/hehonghui/android-tech-frontier/blob/master/issue-30/%E9%80%9A%E8%BF%87%E7%A1%AC%E4%BB%B6%E5%B1%82%E6%8F%90%E9%AB%98Android%E5%8A%A8%E7%94%BB%E7%9A%84%E6%80%A7%E8%83%BD.md
+        v.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         val holder1 = PropertyValuesHolder.ofFloat("rotationX", 0f, 360f)
         val holder2 = PropertyValuesHolder.ofFloat("rotationY", 0f, 360f)
         val holder3 = PropertyValuesHolder.ofFloat("rotation", 0f, 360f)
-        val anim = ObjectAnimator.ofPropertyValuesHolder(iv_pic, holder1, holder2, holder3)
+        val anim = ObjectAnimator.ofPropertyValuesHolder(v, holder1, holder2, holder3)
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                v.setLayerType(View.LAYER_TYPE_NONE, null)
+            }
+        })
         anim.interpolator = LinearInterpolator()
         anim.duration = 2000
-//        anim.repeatCount = ValueAnimator.INFINITE
-//        anim.repeatMode = ValueAnimator.RESTART
+        anim.repeatCount = ValueAnimator.INFINITE
+        anim.repeatMode = ValueAnimator.RESTART
         anim.start()
     }
 

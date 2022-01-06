@@ -35,6 +35,8 @@
         <activity android:name="com.example.shadow.ShadowActivity" />
         <activity android:name="com.example.coordinatorlayout.multinested.MultiNestedActivity" />
         <activity android:name="com.example.recyclerview.RecyclerViewActivity" />
+        <activity android:name="com.example.animation.FragmentSwitchActivity" />
+        <activity android:name="com.example.gpu.overdraw.OverDrawActivity" />
     </application>
 
 </manifest>

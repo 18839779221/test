@@ -1,6 +1,9 @@
 package com.example
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
@@ -8,10 +11,14 @@ import android.text.Spanned
 import android.text.style.DynamicDrawableSpan
 import android.text.style.ImageSpan
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.animation.AnimationActivity
+import com.example.animation.FragmentSwitchActivity
 import com.example.coordinatorlayout.multinested.MultiNestedActivity
 import com.example.fragment.FragmentActivity
+import com.example.gpu.overdraw.OverDrawActivity
 import com.example.nestedscroll.NestedScrollActivity
 import com.example.recyclerview.RecyclerViewActivity
 import com.example.ruler.RulerActivity
@@ -21,6 +28,7 @@ import com.example.sharedflow.SFActivity
 import com.example.test.NetActivity
 import com.example.test.R
 import com.example.viewgroup.GroupActivity
+import com.example.window.MessageQueueWindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -83,5 +91,21 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, RecyclerViewActivity::class.java)
         startActivity(intent)
     }
+
+    fun toFragmentSwitchActivity(v: View){
+        val intent = Intent(this, FragmentSwitchActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toOverDrawActivity(v: View){
+        val intent = Intent(this, OverDrawActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun showMessageQueueView(v: View) {
+        MessageQueueWindowManager.addMessageQueueWindow(this)
+    }
+
+
 
 }

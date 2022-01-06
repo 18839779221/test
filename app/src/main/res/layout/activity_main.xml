@@ -29,6 +29,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Fragment切换动画"
+        android:textAllCaps="false"
+        android:onClick="toFragmentSwitchActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="自定义ViewGroup"
         android:textAllCaps="false"
         android:onClick="toGroupActivity"/>
@@ -81,6 +88,21 @@
         android:text="RecyclerView"
         android:textAllCaps="false"
         android:onClick="toRecyclerViewActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GUP过渡绘制"
+        android:textAllCaps="false"
+        android:onClick="toOverDrawActivity"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="消息队列View"
+        android:textAllCaps="false"
+        android:onClick="showMessageQueueView"/>
 
     <TextView
         android:id="@+id/tv_test"
