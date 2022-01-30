@@ -24,7 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NetActivity" />
+        <activity android:name=".NetActivity"
+            android:theme="@style/CommonTransparent"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.example.sharedflow.SFActivity" />
         <activity android:name="com.example.animation.AnimationActivity" />
         <activity android:name="com.example.viewgroup.GroupActivity" />
@@ -37,6 +39,13 @@
         <activity android:name="com.example.recyclerview.RecyclerViewActivity" />
         <activity android:name="com.example.animation.FragmentSwitchActivity" />
         <activity android:name="com.example.gpu.overdraw.OverDrawActivity" />
+        <activity android:name="com.example.launchmode.LaunchModeActivity" />
+        <activity android:name="com.example.launchmode.ALActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name="com.example.launchmode.BLActivity" />
+        <activity android:name="com.example.launchmode.CLActivity" />
+        <activity android:name="com.example.launchmode.DLActivity" />
+
     </application>
 
 </manifest>

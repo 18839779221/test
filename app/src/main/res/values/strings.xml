@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">test</string>
+
+    <string name="trans_card1">trans_card1</string>
+    <string name="trans_card2">trans_card2</string>
+    <string name="trans_card3">trans_card3</string>
+    <string name="trans_card4">trans_card4</string>
+    <string name="trans_card5">trans_card5</string>
+
+    <string name="trans_imageview_i">trans_imageview %1$s</string>
+    <string name="trans_textview_i">trans_textview %1$s</string>
+
+    <string name="trans_card_detail">trans_card_detail</string>
+    <string name="trans_imageview">trans_imageview</string>
+    <string name="trans_textview">trans_textview</string>
 </resources>

@@ -14,4 +14,11 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!--  透明主题，注意与固定横竖屏在android8上的问题  -->
+    <style name="CommonTransparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">#00ffffff</item> <!-- 背景色透明度 -->
+        <item name="android:windowNoTitle">true</item><!-- 无标题 -->
+        <item name="android:windowIsTranslucent">true</item><!-- 半透明,设置为false无透明效果 -->
+    </style>
 </resources>

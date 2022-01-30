@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/leftFragment">
+
+    <fragment android:id="@+id/leftFragment"
+        android:name="com.example.animation.LeftFragment">
+
+        <action android:id="@+id/leftFragment_to_rightFragment"
+            app:destination="@id/rightFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/rightFragment"
+        android:name="com.example.animation.RightFragment">
+        <argument android:name="title"
+            app:argType="string"/>
+        <argument android:name="imageResId"
+            app:argType="integer"/>
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_leftFragment"
+        app:destination="@+id/leftFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@+id/navigation_graph"
+        app:popUpToInclusive="true"/>
+
+</navigation>

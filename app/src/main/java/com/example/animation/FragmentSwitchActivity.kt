@@ -3,7 +3,7 @@ package com.example.animation
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
+import androidx.navigation.findNavController
 import com.example.test.R
 
 /**
@@ -21,31 +21,8 @@ class FragmentSwitchActivity: AppCompatActivity() {
         setContentView(R.layout.activity_fragment_switch)
     }
 
-
     fun openLeftFragment(v: View?) {
-        supportFragmentManager.commit {
-            if (leftFragment.isAdded) {
-                if (leftFragment.isHidden) {
-                    hide(rightFragment)
-                    show(leftFragment)
-                }
-            } else {
-                add(R.id.fragmentContainer, leftFragment)
-            }
-        }
-    }
-
-    fun openRightFragment(v: View?) {
-        supportFragmentManager.commit {
-            if (rightFragment.isAdded) {
-                if (rightFragment.isHidden) {
-                    hide(leftFragment)
-                    show(rightFragment)
-                }
-            } else {
-                add(R.id.fragmentContainer, rightFragment)
-            }
-        }
+        findNavController(R.id.nav_host_fragment).navigate(LeftFragmentDirections.actionGlobalLeftFragment())
     }
 
 }

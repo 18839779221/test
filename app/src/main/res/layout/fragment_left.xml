@@ -1,75 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_marginTop="32dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card1"
         android:layout_width="match_parent"
         android:layout_height="140dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:transitionName="@string/trans_card1"
         app:cardCornerRadius="8dp">
 
         <ImageView
+            android:id="@+id/iv_card1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/frozen"
-            android:scaleType="centerCrop"/>
+            android:transitionName="@{@string/trans_imageview_i(1)}" />
 
         <TextView
+            android:id="@+id/tv_card1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="8dp"
             android:text="森林之王"
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:transitionName="@{@string/trans_textview_i(1)}" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="82dp"
         android:padding="12dp">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/view1"
-            android:scaleType="centerCrop"/>
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:src="@drawable/view2"
-            android:scaleType="centerCrop"/>
+            android:layout_weight="1"
+            android:transitionName="@string/trans_card2">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/view3"
-            android:scaleType="centerCrop"/>
+            <ImageView
+                android:id="@+id/iv_card2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/view1" />
 
-        <ImageView
+            <TextView
+                android:id="@+id/tv_card2_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="8dp"
+                android:text="湖光掠影"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:src="@drawable/view4"
-            android:scaleType="centerCrop"/>
+            android:layout_weight="1"
+            android:transitionName="@string/trans_card3">
+
+            <ImageView
+                android:id="@+id/iv_card3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/view2" />
+
+            <TextView
+                android:id="@+id/tv_card3_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="8dp"
+                android:text="海市蜃楼"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:transitionName="@string/trans_card4">
+
+            <ImageView
+                android:id="@+id/iv_card4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/view3" />
+
+            <TextView
+                android:id="@+id/tv_card4_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="8dp"
+                android:text="冰雪奇缘"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:transitionName="@string/trans_card5">
+
+            <ImageView
+                android:id="@+id/iv_card5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/view4" />
+
+            <TextView
+                android:id="@+id/tv_card5_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="8dp"
+                android:text="天空之境"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

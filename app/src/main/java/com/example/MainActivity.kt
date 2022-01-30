@@ -19,6 +19,7 @@ import com.example.animation.FragmentSwitchActivity
 import com.example.coordinatorlayout.multinested.MultiNestedActivity
 import com.example.fragment.FragmentActivity
 import com.example.gpu.overdraw.OverDrawActivity
+import com.example.launchmode.LaunchModeActivity
 import com.example.nestedscroll.NestedScrollActivity
 import com.example.recyclerview.RecyclerViewActivity
 import com.example.ruler.RulerActivity
@@ -104,6 +105,11 @@ class MainActivity : AppCompatActivity() {
 
     fun showMessageQueueView(v: View) {
         MessageQueueWindowManager.addMessageQueueWindow(this)
+    }
+
+    fun toLaunchModeActivity(v: View) {
+        val intent = Intent(this, LaunchModeActivity::class.java)
+        startActivity(intent)
     }
 
 
