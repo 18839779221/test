@@ -1,21 +1,12 @@
 package com.example
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.DynamicDrawableSpan
-import android.text.style.ImageSpan
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.animation.AnimationActivity
 import com.example.animation.FragmentSwitchActivity
+import com.example.biometric.BiometricActivity
 import com.example.coordinatorlayout.multinested.MultiNestedActivity
 import com.example.fragment.FragmentActivity
 import com.example.gpu.overdraw.OverDrawActivity
@@ -26,11 +17,11 @@ import com.example.ruler.RulerActivity
 import com.example.scroll.ScrollActivity
 import com.example.shadow.ShadowActivity
 import com.example.sharedflow.SFActivity
+import com.example.table.TableActivity
 import com.example.test.NetActivity
 import com.example.test.R
 import com.example.viewgroup.GroupActivity
 import com.example.window.MessageQueueWindowManager
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +103,15 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun toTableActivity(v: View) {
+        val intent = Intent(this, TableActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toBiometricActivity(v: View) {
+        val intent = Intent(this, BiometricActivity::class.java)
+        startActivity(intent)
+    }
 
 
 }

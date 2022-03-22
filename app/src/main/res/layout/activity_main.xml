@@ -1,119 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.MainActivity">
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="网络应用demo"
-        android:onClick="toNetActivity"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="sharedFlow"
-        android:textAllCaps="false"
-        android:onClick="toSFActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="网络应用demo"
+            android:onClick="toNetActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="动画"
-        android:textAllCaps="false"
-        android:onClick="toAnimationActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sharedFlow"
+            android:textAllCaps="false"
+            android:onClick="toSFActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fragment切换动画"
-        android:textAllCaps="false"
-        android:onClick="toFragmentSwitchActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="动画"
+            android:textAllCaps="false"
+            android:onClick="toAnimationActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="自定义ViewGroup"
-        android:textAllCaps="false"
-        android:onClick="toGroupActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fragment切换动画"
+            android:textAllCaps="false"
+            android:onClick="toFragmentSwitchActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="尺帝"
-        android:textAllCaps="false"
-        android:onClick="toRulerActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自定义ViewGroup"
+            android:textAllCaps="false"
+            android:onClick="toGroupActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="滑动"
-        android:textAllCaps="false"
-        android:onClick="toScrollActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="尺帝"
+            android:textAllCaps="false"
+            android:onClick="toRulerActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="嵌套滑动"
-        android:textAllCaps="false"
-        android:onClick="toNestedScrollActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="滑动"
+            android:textAllCaps="false"
+            android:onClick="toScrollActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fragment"
-        android:textAllCaps="false"
-        android:onClick="toFragmentActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="嵌套滑动"
+            android:textAllCaps="false"
+            android:onClick="toNestedScrollActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="阴影"
-        android:textAllCaps="false"
-        android:onClick="toShadowActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fragment"
+            android:textAllCaps="false"
+            android:onClick="toFragmentActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="多层嵌套滑动"
-        android:textAllCaps="false"
-        android:onClick="toMultiNestedActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="阴影"
+            android:textAllCaps="false"
+            android:onClick="toShadowActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="RecyclerView"
-        android:textAllCaps="false"
-        android:onClick="toRecyclerViewActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="多层嵌套滑动"
+            android:textAllCaps="false"
+            android:onClick="toMultiNestedActivity" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="GUP过渡绘制"
-        android:textAllCaps="false"
-        android:onClick="toOverDrawActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RecyclerView"
+            android:textAllCaps="false"
+            android:onClick="toRecyclerViewActivity" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GUP过渡绘制"
+            android:textAllCaps="false"
+            android:onClick="toOverDrawActivity" />
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="消息队列View"
-        android:textAllCaps="false"
-        android:onClick="showMessageQueueView"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="消息队列View"
+            android:textAllCaps="false"
+            android:onClick="showMessageQueueView" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Activity启动模式"
-        android:textAllCaps="false"
-        android:onClick="toLaunchModeActivity"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity启动模式"
+            android:textAllCaps="false"
+            android:onClick="toLaunchModeActivity" />
 
-    <TextView
-        android:id="@+id/tv_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="表格"
+            android:textAllCaps="false"
+            android:onClick="toTableActivity" />
 
-</LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="生物识别"
+            android:textAllCaps="false"
+            android:onClick="toBiometricActivity" />
+
+        <TextView
+            android:id="@+id/tv_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>
