@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingTop="60dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:id="@+id/tvUsernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="用户名"
+        android:textSize="14sp"
+        android:minWidth="54dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/etUsername"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="60dp"
+        android:text=""
+        android:textSize="14sp"
+        android:inputType="textEmailAddress"
+        app:layout_constraintLeft_toRightOf="@+id/tvUsernameLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="abc@bytedance.com"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvPasswordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="密码"
+        android:minWidth="54dp"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/etPassword"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsernameLabel" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="60dp"
+        android:text=""
+        android:textSize="14sp"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toRightOf="@+id/tvPasswordLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsernameLabel"
+        tools:text="abcdefg" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:text="登录"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordLabel" />
+
+    <ImageView
+        android:id="@+id/ivFingerprint"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/fingerprint"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
