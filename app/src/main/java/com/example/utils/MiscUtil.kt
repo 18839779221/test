@@ -2,6 +2,7 @@ package com.example.utils
 
 import android.content.Context
 import android.graphics.Color
+import com.example.BaseApplication
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -21,6 +22,14 @@ fun transformToColorInt(color: Int): Int {
 
 fun dp2Px(context: Context, dp: Int): Int {
     return (context.resources.displayMetrics.density * dp).roundToInt()
+}
+
+fun dp2Px(context: Context, dp: Float): Int {
+    return (context.resources.displayMetrics.density * dp).roundToInt()
+}
+
+fun dp2px(dp: Float): Int {
+    return (BaseApplication.context!!.resources.displayMetrics.density * dp).roundToInt()
 }
 
 fun hasGravity(mixedGravity: Int, singleGravity1: Int, singleGravity2: Int): Boolean {

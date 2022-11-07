@@ -22,7 +22,7 @@ android {
 
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
     buildTypes {
@@ -81,5 +81,9 @@ dependencies {
     implementation 'com.github.huangyanbin:SmartTable:2.2.0'
 
     implementation "androidx.biometric:biometric:1.0.1"
-    
+
+    implementation 'com.github.loperSeven:DateTimePicker:0.5.8'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 }

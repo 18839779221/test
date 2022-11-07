@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.test">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -53,9 +54,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NetActivity"
+        <activity
+            android:name=".NetActivity"
             android:theme="@style/CommonTransparent"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name="com.example.sharedflow.SFActivity" />
         <activity android:name="com.example.animation.AnimationActivity" />
         <activity android:name="com.example.viewgroup.GroupActivity" />
@@ -69,14 +71,20 @@
         <activity android:name="com.example.animation.FragmentSwitchActivity" />
         <activity android:name="com.example.gpu.overdraw.OverDrawActivity" />
         <activity android:name="com.example.launchmode.LaunchModeActivity" />
-        <activity android:name="com.example.launchmode.ALActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name="com.example.launchmode.ALActivity"
+            android:launchMode="singleTask" />
         <activity android:name="com.example.launchmode.BLActivity" />
         <activity android:name="com.example.launchmode.CLActivity" />
         <activity android:name="com.example.launchmode.DLActivity" />
         <activity android:name="com.example.table.TableActivity" />
         <activity android:name="com.example.biometric.BiometricActivity" />
         <activity android:name="com.example.mediaselect.MediaSelectActivity" />
+        <activity android:name="com.example.leak.HandlerActivity" />
+        <activity android:name="com.example.webview.SimpleWebViewActivity" />
+        <activity android:name="com.example.audiorecord.AudioRecordActivity" />
+        <activity android:name="com.example.timepicker.TimePickerActivity" />
+        <activity android:name="com.example.chart.ChartActivity" />
 
     </application>
 

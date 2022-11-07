@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|top"
+    android:orientation="horizontal">
+
+    <com.loper7.date_time_picker.number_picker.NumberPicker
+        android:id="@+id/datetime_hour"
+        android:layout_width="0dp"
+        android:layout_height="264dp"
+        android:layout_weight="1"
+        android:layout_marginStart="64dp"
+        app:np_textColor="#23272E"
+        app:np_textBold="false"
+        app:np_selectedTextColor="#23272E"
+        app:np_selectedTextBold="false"
+        app:np_selectedTextSize="16sp"
+        app:np_textSize="16sp"
+        app:np_dividerColor="#E5E5E5"
+        app:np_dividerThickness="0.5dp"
+        app:np_dividerDistance="56dp"
+        app:np_wheelItemCount="5" />
+
+    <com.loper7.date_time_picker.number_picker.NumberPicker
+        android:id="@+id/datetime_minute"
+        android:layout_width="0dp"
+        android:layout_height="264dp"
+        android:layout_weight="1"
+        android:layout_marginEnd="64dp"
+        app:np_textColor="#23272E"
+        app:np_textBold="false"
+        app:np_selectedTextColor="#23272E"
+        app:np_selectedTextBold="false"
+        app:np_selectedTextSize="16sp"
+        app:np_textSize="16sp"
+        app:np_dividerColor="#E5E5E5"
+        app:np_dividerThickness="0.5dp"
+        app:np_dividerDistance="56dp"
+        app:np_wheelItemCount="5" />
+
+
+</LinearLayout>

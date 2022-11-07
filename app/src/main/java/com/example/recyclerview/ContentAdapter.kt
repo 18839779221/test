@@ -1,14 +1,15 @@
 package com.example.recyclerview
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnDetach
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
-import android.util.Log
-import androidx.core.view.doOnDetach
+import com.example.utils.setTextIfNullSetGone
 import kotlinx.android.synthetic.main.item_content.view.*
 
 class ContentAdapter : ListAdapter<User, ContentAdapter.ViewHolder>(DiffCallback) {
@@ -49,7 +50,7 @@ class ContentAdapter : ListAdapter<User, ContentAdapter.ViewHolder>(DiffCallback
         fun bind(user: User?) {
             itemView.apply {
                 tvId.text = user?.id
-                tvName.text = user?.name
+                tvName.setTextIfNullSetGone(user?.name)
             }
         }
 
@@ -60,7 +61,6 @@ class ContentAdapter : ListAdapter<User, ContentAdapter.ViewHolder>(DiffCallback
         }
 
     }
-
 
 
 }

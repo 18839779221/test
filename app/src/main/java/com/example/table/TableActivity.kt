@@ -61,7 +61,7 @@ class TableActivity : AppCompatActivity() {
             leftHeader = leftHeaderList,
             tableContent = tableContent
         ))
-//        initSmartTable()
+        initSmartTable()
     }
 
     private fun createDefaultTableCell(

@@ -12,13 +12,13 @@
     <com.example.table.TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:layout_height="1000dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="1000dp"/>
+        android:layout_marginBottom="32dp"/>
 
     <com.bin.david.form.core.SmartTable
         android:id="@+id/smartTable"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp" />
 

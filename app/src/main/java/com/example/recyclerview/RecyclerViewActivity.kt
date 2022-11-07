@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.R
 import kotlinx.android.synthetic.main.activity_recyclerview.*
-import java.lang.Thread.sleep
 
 /**
  * @author wanglun
@@ -22,16 +21,18 @@ class RecyclerViewActivity : AppCompatActivity() {
         initRecyclerView()
     }
 
+
     private fun initRecyclerView() {
         rvContent.apply {
             adapter = contentAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        contentAdapter.submitList(listOf(User("1", "bob"),
-            User("2", "Tom"),
+        contentAdapter.submitList(listOf(
             User("1", "bob"),
             User("2", "Tom"),
             User("1", "bob"),
+            User("2", ""),
+            User("1", ""),
             User("2", "Tom"),
             User("1", "bob"),
             User("2", "Tom"),

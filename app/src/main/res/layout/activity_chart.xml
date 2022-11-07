@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartView"
+        android:layout_width="match_parent"
+        android:layout_height="240dp" />
+
+    <include
+        android:id="@+id/chart_indicator"
+        android:layout_width="122dp"
+        android:layout_height="wrap_content"
+        layout="@layout/line_chart_indicator" />
+
+</FrameLayout>
