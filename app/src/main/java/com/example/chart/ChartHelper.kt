@@ -1,16 +1,13 @@
 package com.example.chart
 
+import android.content.Context
 import android.graphics.Color
-import android.view.View
-import android.widget.FrameLayout
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.example.test.BuildConfig
 import com.example.test.databinding.LineChartIndicatorBinding
 import com.example.utils.dp2px
-import com.example.utils.setMarginsRelative
-import com.example.utils.setRoundCorner
-import com.example.utils.setVisible
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -26,21 +23,31 @@ import java.text.DecimalFormat
  * @date 2022/11/04
  * @description
  */
-class ChartHelper {
+class ChartHelper(private val context: Context) {
+
+    companion object {
+        val chartLineColorList = listOf("#2A55E5", "#79D90C", "#F5B025", "#10A0B3", "#AF10B0")
+        val fakerTimeList = listOf("00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00")
+    }
 
     private var chartModel: LineChartModel? = null
     private val commonTextColor = Color.parseColor("#969AA0")
     private val commonGridColor = Color.parseColor("#DFE0E2")
 
+    private val chartIndicatorPopWindow by lazy {
+        ChartFloatIndicator(context)
+    }
+
     fun initChart(
         chartView: LineChart,
-        indicatorBinding: LineChartIndicatorBinding,
-        chartModel: LineChartModel,
+        indicatorBinding: LineChartIndicatorBinding?,
+        legendView: LegendView,
+        chartModel: LineChartModel?,
     ) {
         this.chartModel = chartModel
+        chartView.isLogEnabled = BuildConfig.DEBUG
 
-        indicatorBinding.ivLabelItemLeft.setRoundCorner(0f, isOval = true)
-        indicatorBinding.ivLabelItemRight.setRoundCorner(0f, isOval = true)
+        chartView.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(chartIndicatorPopWindow)
 
         // X轴
         configXAxis(chartView.xAxis, chartModel)
@@ -58,11 +65,14 @@ class ChartHelper {
             description.isEnabled = false
             legend.isEnabled = false
             setBackgroundColor(Color.WHITE)
+            minOffset = 0f
+            setExtraOffsets(0f, 15f, 0f, 15f)
+            renderer = HighlightWithCircleLineChartRender(this, animator, viewPortHandler)
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     h ?: return
                     e ?: return
-                    showChartIndicator(chartView, indicatorBinding, e, h)
+                    showChartIndicator(chartView, e, h)
                 }
 
                 override fun onNothingSelected() {}
@@ -70,63 +80,64 @@ class ChartHelper {
         }
 
         // 设置图标下方标识
-        setLegends(chartView)
+//        setLegends(legendView, chartModel)
 
-        updateChart(chartView, chartModel)
+        if (chartModel != null) {
+            updateChart(chartView, legendView, chartModel)
+        }
 
     }
 
     fun updateChart(
         chartView: LineChart,
+        legendView: LegendView,
         newChartModel: LineChartModel,
     ) {
-        val realCharModel = LineChartModel.resortChartDataSet(this.chartModel, newChartModel)
-        this.chartModel = realCharModel
-        chartView.axisLeft.isEnabled = realCharModel.dataSetList[0] != null
-        chartView.axisRight.isEnabled = realCharModel.dataSetList[1] != null
+        this.chartModel = newChartModel
 
         val lineData = LineData().apply {
             setValueTextColor(Color.BLACK)
             setValueTextSize(9f)
         }
-        val chartDataSetLeft = createDataSet(realCharModel, 0)
-        val chartDataSetRight = createDataSet(realCharModel, 1)
-        if (chartDataSetLeft != null) {
-            lineData.addDataSet(chartDataSetLeft)
+        newChartModel.dataSetList.forEachIndexed { index, item ->
+            createDataSet(newChartModel, index, item)?.let {
+                lineData.addDataSet(it)
+            }
         }
-        if (chartDataSetRight != null) {
-            lineData.addDataSet(chartDataSetRight)
-        }
-
+        setLegends(legendView, chartModel)
+        configXAxis(chartView.xAxis, newChartModel)
+        chartView.axisLeft.isEnabled = newChartModel.dataSetList.any { it.isLeft }
+        chartView.axisRight.isEnabled = newChartModel.dataSetList.any { !it.isLeft }
         chartView.data = lineData
         chartView.notifyDataSetChanged()
         chartView.invalidate()
-
     }
 
-    private fun createDataSet(chartModel: LineChartModel, index: Int): LineDataSet? {
-        val isLeft = index % 2 == 0
-        val entries = toEntries(chartModel.dataSetList.getOrNull(index))
+    private fun createDataSet(chartModel: LineChartModel, index: Int, dataSetWrapper: DataSetWrapper): LineDataSet? {
+        val isLeft = dataSetWrapper.isLeft
+        val entries = toEntries(dataSetWrapper.dataSet)
         if (entries.isEmpty()) return null
         val label = chartModel.labelList.getOrNull(index) ?: return null
-        val color = Color.parseColor(if (isLeft) "#2A55E5" else "#79D90C")
+        val color = dataSetWrapper.lineColor
         return LineDataSet(entries, label).apply {
             axisDependency = if (isLeft) YAxis.AxisDependency.LEFT else YAxis.AxisDependency.RIGHT
             lineWidth = 2f
-            setDrawCircles(true)
+            setDrawCircles(false)
             this.color = color
             setCircleColor(color)
             circleRadius = dp2px(2f).toFloat()
             circleHoleRadius = dp2px(1.2f).toFloat()
             mode = LineDataSet.Mode.LINEAR
-            setDrawHighlightIndicators(false)
+            highLightColor = Color.parseColor("#2A55E5")
+            enableDashedHighlightLine(12f, 6f, 0f)
+            setDrawHorizontalHighlightIndicator(false)
             setDrawFilled(false)
             setDrawValues(false)
         }
     }
 
-    private fun configXAxis(axis: XAxis, chartModel: LineChartModel) {
-        val timePoints = chartModel.timeList
+    private fun configXAxis(axis: XAxis, chartModel: LineChartModel?) {
+        val timePoints = chartModel?.timeList ?: fakerTimeList
         axis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             textSize = 10f
@@ -136,11 +147,20 @@ class ChartHelper {
             setLabelCount(timePoints.size, false)
             setDrawGridLines(true)
             setDrawAxisLine(false)
+            setAvoidFirstLastClipping(true)
             enableAxisLineDashedLine(12f, 6f, 0f)
             enableGridDashedLine(12f, 6f, 0f)
             granularity = 1f
+            axisMinimum = -1f
+            axisMaximum = timePoints.size.toFloat()
             valueFormatter = IAxisValueFormatter { value, _ ->
-                return@IAxisValueFormatter timePoints[value.toInt() % timePoints.size]
+                val index = value.toInt()
+                if (index < 0 || index >= timePoints.size) return@IAxisValueFormatter ""
+                return@IAxisValueFormatter if (chartModel?.timeValueFormatter != null) {
+                    chartModel.timeValueFormatter(index, timePoints)
+                } else {
+                    timePoints[index % timePoints.size]
+                }
             }
         }
     }
@@ -148,13 +168,14 @@ class ChartHelper {
     private fun configYAxis(axis: YAxis) {
         axis.apply {
             textColor = commonTextColor
-            setDrawZeroLine(true)
+            setDrawZeroLine(false)
             setDrawAxisLine(false)
             gridColor = commonGridColor
             textSize = 10f
             setDrawGridLines(true)
             enableGridDashedLine(12f, 6f, 0f)
             setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART)
+            // 固定展示6个刻度，为了左右刻度对齐
             setLabelCount(6, true)
             axisMinimum = 0f
             valueFormatter = IAxisValueFormatter { value: Float, axis: AxisBase? ->
@@ -165,66 +186,46 @@ class ChartHelper {
         }
     }
 
-    private fun setLegends(chartView: LineChart) {
-        chartView.legend.apply {
-            isEnabled = true
-            form = Legend.LegendForm.CIRCLE
-            formSize = 6f
-            textSize = 12f
-            textColor = commonTextColor
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-            orientation = Legend.LegendOrientation.HORIZONTAL
-            xEntrySpace = 20f
-            setDrawInside(false)
+    private fun setLegends(legendView: LegendView, chartModel: LineChartModel?) {
+//        chartView.legend.apply {
+//            isEnabled = false
+//            form = Legend.LegendForm.CIRCLE
+//            formSize = 6f
+//            textSize = 12f
+//            textColor = commonTextColor
+//            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+//            horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//            orientation = Legend.LegendOrientation.HORIZONTAL
+//            xEntrySpace = 20f
+//            setDrawInside(false)
+//            isWordWrapEnabled = true
+//        }
+        if (chartModel == null) return
+        val legends = chartModel.labelList.mapIndexed { index, label ->
+            chartModel.dataSetList[index].lineColor to label
         }
+        legendView.setLegends(legends, dp2px(20f))
     }
 
     private fun showChartIndicator(
         chartView: LineChart,
-        indicatorBinding: LineChartIndicatorBinding,
         e: Entry,
         h: Highlight,
     ) {
         val chartModel = chartModel ?: return
-        indicatorBinding.apply {
-            val offsetTop: Int = 20
-            val params = FrameLayout.LayoutParams(floatIndicator.layoutParams)
-            var targetX = h.xPx
-            var targetY = h.yPx
-            if (targetX + params.width > chartView.width) {
-                targetX -= params.width - 20
-            } else {
-                targetX -= params.width / 2
-                if (targetX < 0) {
-                    targetX = 0f
-                }
-            }
-            targetY -= params.height + 15
-            params.setMarginsRelative(targetX.toInt(), (targetY + offsetTop).toInt(), 0, 0)
-            floatIndicator.layoutParams = params
-            floatIndicator.visibility = View.VISIBLE
+        if (chartModel === LineChartModel.EMPTY) return
+        chartIndicatorPopWindow.updateView(chartView, chartModel, e, h)
 
-            val position = e.x.toInt()
-            indicatorTime.text = chartModel.timeList[position]
-
-            val dataSetLeft = chartModel.dataSetList.getOrNull(0)
-            indicatorItemLeft.setVisible(!dataSetLeft.isNullOrEmpty())
-            if (!dataSetLeft.isNullOrEmpty()) {
-                val value = dataSetLeft.getOrElse(position) { "" }
-                val label = chartModel.labelList[0]
-                tvLabelItemLeft.text = label
-                tvValueItemLeft.text = value
-            }
-            val dataSetRight = chartModel.dataSetList.getOrNull(1)
-            indicatorItemRight.setVisible(!dataSetRight.isNullOrEmpty())
-            if (!dataSetRight.isNullOrEmpty()) {
-                val value = dataSetRight.getOrElse(position) { "" }
-                val label = chartModel.labelList[1]
-                tvLabelItemRight.text = label
-                tvValueItemRight.text = value
+        // 将单个highlight分发为整个x轴列的highlight
+        val position = e.x.toInt()
+        val highlightValues = mutableListOf<Highlight>()
+        for (index in 0 until chartView.data.dataSetCount) {
+            if (position >= 0 && position < chartView.data.dataSets[index].entryCount) {
+                val entry = chartView.data.dataSets[index].getEntryForIndex(position)
+                highlightValues.add(Highlight(entry.x, entry.y, index))
             }
         }
+        chartView.highlightValues(highlightValues.toTypedArray())
     }
 
     fun preDealData(value: String): String? {
@@ -271,7 +272,7 @@ class ChartHelper {
 
     private fun toEntries(dataSet: List<String>?): List<Entry> {
         return dataSet?.mapIndexed { index, item ->
-            Entry(index.toFloat(), item.toFloat())
+            Entry(index.toFloat(), item.toFloatOrNull() ?: 0f)
         }.orEmpty()
     }
 }

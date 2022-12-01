@@ -1,40 +1,48 @@
 package com.example.chart
 
-data class LineChartModel(
-    val dataSetList: List<List<String>?>,
-    val timeList: List<String>,
-    val labelList: List<String?>,
-) {
-    companion object {
-        // 重排图表数据集，希望对于prev和curr中同时存在的item，其展示效果不变（在list中的index不变）
-        // 需要保证prev和curr的size一样（相同的size中，部分元素可为空）
-        fun resortChartDataSet(prev: LineChartModel?, curr: LineChartModel): LineChartModel {
-            if (prev == null ||
-                prev === curr ||
-                prev.labelList.size != curr.labelList.size
-            ) return curr
-            val targetDataSetList = curr.dataSetList.toMutableList()
-            val targetLabelList = curr.labelList.toMutableList()
-            for (prevIndex in 0 until prev.dataSetList.size) {
-                val currIndex = curr.labelList.indexOfFirst { it == prev.labelList[prevIndex] }
-                if (currIndex != -1) {
-                    // swap index
-                    val data1 = targetDataSetList[currIndex]
-                    val data2 = targetDataSetList[prevIndex]
-                    targetDataSetList[currIndex] = data2
-                    targetDataSetList[prevIndex] = data1
+import android.graphics.Color
 
-                    val label1 = targetLabelList[currIndex]
-                    val label2 = targetLabelList[prevIndex]
-                    targetLabelList[currIndex] = label2
-                    targetLabelList[prevIndex] = label1
-                }
-            }
-            return LineChartModel(
-                targetDataSetList,
-                curr.timeList,
-                targetLabelList
-            )
+data class LineChartModel(
+    val dataSetList: List<DataSetWrapper>,
+    var timeList: List<String>,
+    val labelList: List<String>,
+    val timeValueFormatter: (index: Int, timeList: List<String>) -> String = defaultTimeValueFormatter,
+) {
+
+    init {
+//        dataSetList.forEach {
+//            it.dataSet = it.dataSet.toMutableList().apply {
+//                add(0, "${Integer.MIN_VALUE}")
+////                add(0, "${Integer.MIN_VALUE}")
+////                add(size - 1, "${Integer.MIN_VALUE}")
+//                add(size - 1, "${Integer.MIN_VALUE}")
+//            }
+//        }
+//        timeList = timeList.toMutableList().apply {
+//            add(0, "")
+////            add(0, "")
+////            add(size - 1, "")
+//            add(size - 1, "")
+//        }
+    }
+
+    companion object {
+
+        val defaultTimeValueFormatter = { index: Int, timeList: List<String> ->
+            timeList[index % timeList.size]
         }
+
+        val EMPTY = LineChartModel(
+            dataSetList = listOf(DataSetWrapper(listOf("0", "0", "0", "0", "0", "0", "0", "0"), true, Color.TRANSPARENT)),
+            timeList = listOf("", "", "", "", "", "", "", ""),
+            labelList = listOf(""),
+            timeValueFormatter = { _, _ -> "" }
+        )
     }
 }
+
+data class DataSetWrapper(
+    var dataSet: List<String>,
+    val isLeft: Boolean, // 对应y坐标轴是否在左边
+    val lineColor: Int = Color.parseColor("#DFE0E2"), // 对应折线颜色，如果不填则使用默认颜色
+)

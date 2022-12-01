@@ -62,6 +62,34 @@ class TableActivity : AppCompatActivity() {
             tableContent = tableContent
         ))
         initSmartTable()
+        initWorkTable()
+    }
+
+    private fun initWorkTable() {
+        workTable.setData(
+            listOf(
+                listOf(
+                    "一", "00:00\n ~ \n24:00", "无上限"
+                ),
+                listOf(
+                    "二", "00:00\n ~ \n24:00", "无上限"
+                ),
+                listOf(
+                    "三", "-", "-"
+                ),
+                listOf(
+                    "四", "00:00\n ~ \n24:00", "无上限"
+                ),
+                listOf(
+                    "五", "00:00\n ~ \n24:00", "-"
+                ),
+                listOf(
+                    "六", "00:00\n ~ \n24:00", "无上限"
+                ),
+                listOf(
+                    "日", "00:00\n ~ \n24:00", "无上限"
+                )
+            ))
     }
 
     private fun createDefaultTableCell(
@@ -118,7 +146,7 @@ class TableActivity : AppCompatActivity() {
             verticalPadding = DensityUtils.dp2px(this@TableActivity, 16f)
             horizontalPadding = DensityUtils.dp2px(this@TableActivity, 10f)
             leftAndTopBackgroundColor = Color.parseColor("#F8F9FA")
-            contentCellBackgroundFormat = object: BaseCellBackgroundFormat<CellInfo<*>>() {
+            contentCellBackgroundFormat = object : BaseCellBackgroundFormat<CellInfo<*>>() {
                 override fun getBackGroundColor(cell: CellInfo<*>?): Int {
                     if (cell?.col == 0) {
                         return titleBgColor

@@ -8,6 +8,7 @@ import com.example.animation.AnimationActivity
 import com.example.animation.FragmentSwitchActivity
 import com.example.audiorecord.AudioRecordActivity
 import com.example.biometric.BiometricActivity
+import com.example.canvas.CanvasActivity
 import com.example.chart.ChartActivity
 import com.example.coordinatorlayout.multinested.MultiNestedActivity
 import com.example.fragment.FragmentActivity
@@ -140,6 +141,11 @@ class MainActivity : AppCompatActivity() {
 
     fun toChartActivity(v: View) {
         val intent = Intent(this, ChartActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toCanvasActivity(v: View) {
+        val intent = Intent(this, CanvasActivity::class.java)
         startActivity(intent)
     }
 

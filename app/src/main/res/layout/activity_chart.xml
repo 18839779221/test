@@ -8,10 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="240dp" />
 
-    <include
-        android:id="@+id/chart_indicator"
-        android:layout_width="122dp"
-        android:layout_height="wrap_content"
-        layout="@layout/line_chart_indicator" />
+    <com.example.chart.LegendView
+        android:id="@+id/chartLegend"
+        android:layout_marginTop="240dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

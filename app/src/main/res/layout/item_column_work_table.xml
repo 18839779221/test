@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvItemHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/table_border1"
+        android:gravity="center"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:textSize="12sp"
+        android:textColor="#8F949C"
+        tools:text="一" />
+
+
+    <TextView
+        android:id="@+id/tvItem1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/table_border2"
+        android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="16dp"
+        android:textColor="#8F949C"
+        android:textSize="12sp"
+        tools:text="00:00\n~\n24:00" />
+
+    <TextView
+        android:id="@+id/tvItem2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/table_border2"
+        android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="16dp"
+        android:textColor="#8F949C"
+        android:textSize="12sp"
+        tools:text="无上限" />
+
+</LinearLayout>
