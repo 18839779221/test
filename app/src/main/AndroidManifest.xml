@@ -86,6 +86,8 @@
         <activity android:name="com.example.timepicker.TimePickerActivity" />
         <activity android:name="com.example.chart.ChartActivity" />
         <activity android:name="com.example.canvas.CanvasActivity" />
+        <activity android:name="com.example.textview.TextViewActivity" />
+        <activity android:name=".CoroutineActivity" />
 
     </application>
 

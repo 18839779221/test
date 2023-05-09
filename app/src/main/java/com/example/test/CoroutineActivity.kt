@@ -2,6 +2,7 @@ package com.example.test
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,13 +21,12 @@ class CoroutineActivity: AppCompatActivity(){
     }
 
     private fun startCoroutine() {
-        // funTest协程体
-        val funTest: suspend CoroutineScope.() -> Unit = {
+        lifecycleScope.launch {
+            throw java.lang.NullPointerException()
             println("funTest")
             suspendFun1()
             suspendFun2()
         }
-        GlobalScope.launch(Dispatchers.Default, block = funTest)
     }
 
     // 挂起函数

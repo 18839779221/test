@@ -175,6 +175,20 @@
                 android:textAllCaps="false"
                 android:onClick="toCanvasActivity" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAllCaps="false"
+                android:onClick="toTextViewActivity" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="协程"
+                android:textAllCaps="false"
+                android:onClick="toCoroutineActivity" />
+
             <TextView
                 android:id="@+id/tv_test"
                 android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.animation.AnimationActivity
 import com.example.animation.FragmentSwitchActivity
 import com.example.audiorecord.AudioRecordActivity
@@ -22,17 +23,23 @@ import com.example.scroll.ScrollActivity
 import com.example.shadow.ShadowActivity
 import com.example.sharedflow.SFActivity
 import com.example.table.TableActivity
+import com.example.test.CoroutineActivity
 import com.example.test.NetActivity
 import com.example.test.R
+import com.example.textview.TextViewActivity
 import com.example.timepicker.TimePickerActivity
 import com.example.viewgroup.GroupActivity
 import com.example.webview.SimpleWebViewActivity
 import com.example.window.MessageQueueWindowManager
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        lifecycleScope.launch {
+            throw java.lang.NullPointerException()
+        }
     }
 
     fun toNetActivity(v: View) {
@@ -149,4 +156,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun toTextViewActivity(v: View) {
+        val intent = Intent(this, TextViewActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun toCoroutineActivity(v: View) {
+        val intent = Intent(this, CoroutineActivity::class.java)
+        startActivity(intent)
+    }
 }
